@@ -1,0 +1,139 @@
+[
+  {
+    "id": "demo_q001",
+    "type": "single",
+    "chapter": "第1章 数制与编码 / Chapter 1 — Number Systems",
+    "stem": "二进制数 `10110011` 对应的十六进制值是？\nWhat is the hexadecimal value of binary `10110011`?",
+    "options": ["0xB3", "0xA3", "0xC3", "0x33"],
+    "answer": 0,
+    "explanation": "将二进制按4位一组分割：1011 = B，0011 = 3，合并得 0xB3。\nSplit into nibbles: 1011 = B, 0011 = 3 → 0xB3.",
+    "tags": ["number-system", "hex", "binary"]
+  },
+  {
+    "id": "demo_q002",
+    "type": "single",
+    "chapter": "第1章 数制与编码 / Chapter 1 — Number Systems",
+    "stem": "在 C 语言中，表达式 `(signed char)0xFF > 0` 的结果是？\nIn C, what is the result of `(signed char)0xFF > 0`?",
+    "options": [
+      "真（true）",
+      "假（false）",
+      "未定义行为 / undefined behavior",
+      "编译错误 / compile error"
+    ],
+    "answer": 1,
+    "explanation": "在二补数表示法中，`0xFF` 强转为 `signed char` 得 −1，−1 > 0 为假。\nIn two's-complement, `(signed char)0xFF` = −1. −1 > 0 is false.",
+    "tags": ["signed", "unsigned", "cast", "two's-complement"]
+  },
+  {
+    "id": "demo_q003",
+    "type": "single",
+    "chapter": "第2章 MCU 体系结构 / Chapter 2 — MCU Architecture",
+    "stem": "在典型 8 位 MCU 中，程序计数器存储在哪个寄存器？\nWhich register holds the program counter in a typical 8-bit MCU?",
+    "options": ["SP（堆栈指针）", "ACC（累加器）", "PC（程序计数器）", "DPTR（数据指针）"],
+    "answer": 2,
+    "explanation": "PC（Program Counter）存储下一条待执行指令的地址；SP 是堆栈指针；ACC 是累加器；DPTR 是16位数据指针。\nPC (Program Counter) holds the address of the next instruction to fetch. SP is the stack pointer; ACC the accumulator; DPTR the 16-bit data pointer.",
+    "tags": ["registers", "architecture", "PC"]
+  },
+  {
+    "id": "demo_q004",
+    "type": "single",
+    "chapter": "第3章 串行通信 / Chapter 3 — Serial Communication",
+    "stem": "UART 通信中，收发双方波特率不匹配通常会导致什么现象？\nIn UART communication, a baud-rate mismatch between sender and receiver typically causes?",
+    "options": [
+      "乱码输出 / garbled output",
+      "总线竞争 / bus contention",
+      "时钟漂移 / clock drift",
+      "堆栈溢出 / stack overflow"
+    ],
+    "answer": 0,
+    "explanation": "波特率决定每个符号的持续时间。不匹配时接收端采样点偏移，位判决错误，输出乱码。\nBaud rate determines symbol duration. A mismatch shifts the receiver's sampling point, causing bit-decision errors and garbled output.",
+    "tags": ["UART", "baud-rate", "serial"]
+  },
+  {
+    "id": "demo_q005",
+    "type": "multi",
+    "chapter": "第2章 MCU 体系结构 / Chapter 2 — MCU Architecture",
+    "stem": "以下哪些属于典型 MCU 的合法中断源？（多选）\nWhich of the following are valid interrupt sources in a typical MCU? (select all that apply)",
+    "options": [
+      "定时器溢出 / Timer overflow",
+      "外部引脚边沿 / External pin edge",
+      "ADC 转换完成 / ADC conversion complete",
+      "CPU 寄存器溢出 / CPU register overflow"
+    ],
+    "answer": [0, 1, 2],
+    "explanation": "定时器溢出、外部引脚边沿触发（INT0/INT1）、ADC 转换完成都是标准中断源。CPU 寄存器本身不产生溢出中断（算术溢出仅影响标志位）。\nTimer overflow, external edge interrupts, and ADC-complete are standard MCU interrupt sources. CPU register arithmetic overflow only sets a flag — it does not trigger an interrupt vector.",
+    "tags": ["interrupt", "timer", "ADC", "external-interrupt"]
+  },
+  {
+    "id": "demo_q006",
+    "type": "multi",
+    "chapter": "第3章 串行通信 / Chapter 3 — Serial Communication",
+    "stem": "关于 SPI 协议，以下哪些描述正确？（多选）\nWhich statements about the SPI protocol are correct? (select all that apply)",
+    "options": [
+      "全双工，可同时收发 / Full-duplex: simultaneous send and receive",
+      "使用片选信号区分从机 / Uses chip-select to address slaves",
+      "半双工，无法同时收发 / Half-duplex only",
+      "时钟由主机提供 / Clock is provided by the master"
+    ],
+    "answer": [0, 1, 3],
+    "explanation": "SPI 使用 MOSI/MISO/SCK/CS 四线，支持全双工；主机产生时钟；片选低电平激活对应从机。选项C（半双工）错误。\nSPI uses MOSI, MISO, SCK, and CS. It is full-duplex; the master drives SCK; CS selects the active slave. Option C (half-duplex) is incorrect.",
+    "tags": ["SPI", "full-duplex", "serial"]
+  },
+  {
+    "id": "demo_q007",
+    "type": "fill",
+    "chapter": "第1章 数制与编码 / Chapter 1 — Number Systems",
+    "stem": "字符 `'A'` 的 ASCII 码（十进制）是 ___。\nThe decimal ASCII code of character `'A'` is ___.",
+    "answer": [["65"]],
+    "explanation": "ASCII 表中大写字母 A 的编码为 65（十进制）= 0x41（十六进制）。\n'A' = 65 decimal = 0x41 hexadecimal in the ASCII table.",
+    "tags": ["ASCII", "encoding"]
+  },
+  {
+    "id": "demo_q008",
+    "type": "fill",
+    "chapter": "第3章 串行通信 / Chapter 3 — Serial Communication",
+    "stem": "I²C 总线在不含电源线的情况下使用 ___ 根信号线；其中数据线称为 ___。\nThe I²C bus uses ___ signal wires (excluding power). The data line is called ___.",
+    "answer": [["2"], ["SDA"]],
+    "explanation": "I²C 只需 SDA（数据）和 SCL（时钟）两根线，支持多主多从，通过地址区分设备。\nI²C requires only two wires: SDA (data) and SCL (clock). It supports multi-master and multi-slave with address-based arbitration.",
+    "tags": ["I2C", "SDA", "SCL", "serial"]
+  },
+  {
+    "id": "demo_q009",
+    "type": "fill",
+    "chapter": "第4章 位操作 / Chapter 4 — Bit Manipulation",
+    "stem": "将变量 `x` 的第 4 位（从第 0 位起计）置 1 且不影响其他位，正确的 C 表达式为 `x ___= ___`。\nTo set bit 4 (0-indexed) of `x` without changing other bits, fill in: `x ___= ___`.",
+    "answer": [["|"], ["0x10", "1<<4", "(1<<4)"]],
+    "explanation": "使用按位或（|）配合掩码 0x10（即 1<<4）将第4位置1，其余位保持不变。用 &= ~mask 可清零同一位。\nBitwise OR (|) with mask 0x10 (= 1<<4) sets bit 4 without disturbing others. To clear the same bit: x &= ~(1<<4).",
+    "tags": ["bit-manipulation", "mask", "OR"]
+  },
+  {
+    "id": "demo_q010",
+    "type": "short",
+    "chapter": "第2章 MCU 体系结构 / Chapter 2 — MCU Architecture",
+    "stem": "请简述轮询 I/O 与中断驱动 I/O 的区别，并各举一个适合的应用场景。\nBriefly explain the difference between polling I/O and interrupt-driven I/O, and give one suitable use case for each.",
+    "answer": "轮询（Polling）：CPU 持续检查外设状态寄存器直至就绪，实现简单，响应延迟固定，但占用全部 CPU 时间，不适合多任务。适合：对时序要求极严格、事件极频繁的简单系统（如高速 ADC 采样循环）。\n\n中断驱动（Interrupt-driven）：外设就绪时主动向 CPU 发送中断请求，CPU 执行 ISR 后返回主程序，可在等待期间处理其他任务，CPU 利用率高。适合：事件稀少或不定时（如按键、UART 接收）、需要后台运行其他任务的系统。\n\n---\nPolling: the CPU continuously reads a status register until the peripheral signals readiness. Simple to implement, deterministic latency, but wastes CPU cycles. Use case: a tight high-speed ADC sampling loop where every cycle matters.\n\nInterrupt-driven: the peripheral asserts an interrupt request when ready; the CPU suspends current work, runs the ISR, then resumes. CPU is free for other tasks between events. Use case: UART receive or a debounced keypad scan, where events are infrequent and the main loop must do other work.",
+    "explanation": "简答题：答案即为参考解析，由教师对照评分。/ Short-answer: the answer field is the model response; graded by the instructor.",
+    "tags": ["polling", "interrupt", "IO"]
+  },
+  {
+    "id": "demo_q011",
+    "type": "short",
+    "chapter": "第2章 MCU 体系结构 / Chapter 2 — MCU Architecture",
+    "stem": "描述函数调用时栈的变化过程（以典型向下生长的栈为例，说明 SP 和栈内容的变化）。\nDescribe the stack changes during a function call (assume a downward-growing stack; describe SP and stack contents).",
+    "answer": "调用（CALL）时：\n1. 将下一条指令的地址（返回地址 = PC + 指令长度）压入栈顶，SP 减小。\n2. 函数序言（prologue）将需要保护的寄存器逐一压栈，SP 继续减小。\n3. 为局部变量在栈上分配空间（SP -= 局部变量总字节数）。\n\n返回（RET）时：\n1. 释放局部变量空间（SP += 局部变量总字节数）。\n2. 从栈中弹出已保存的寄存器，SP 增大。\n3. 弹出返回地址装入 PC，SP 恢复到 CALL 之前的值，控制流回到调用者。\n\n---\nOn CALL:\n1. The return address (PC + instruction size) is pushed onto the stack; SP decrements.\n2. The function prologue saves caller-saved registers onto the stack; SP decrements further.\n3. Stack space for local variables is allocated (SP -= locals size).\n\nOn RET:\n1. Local variable space is freed (SP += locals size).\n2. Saved registers are popped; SP increments.\n3. The return address is popped into PC; SP is fully restored to its pre-call value.",
+    "explanation": "简答题：答案即为参考解析，由教师对照评分。/ Short-answer: the answer field is the model response; graded by the instructor.",
+    "tags": ["stack", "function-call", "SP", "return-address"]
+  },
+  {
+    "id": "demo_q012",
+    "type": "code",
+    "chapter": "第4章 位操作 / Chapter 4 — Bit Manipulation",
+    "stem": "请编写 C 函数 `uint8_t reverse_bits(uint8_t x)`，返回字节 x 的位序翻转结果（bit 0 与 bit 7 互换，bit 1 与 bit 6 互换，以此类推）。\nWrite a C function `uint8_t reverse_bits(uint8_t x)` that reverses the bit order of a byte (bit 0 ↔ bit 7, bit 1 ↔ bit 6, etc.).",
+    "answer": {
+      "code": "#include <stdint.h>\n\nuint8_t reverse_bits(uint8_t x) {\n    uint8_t result = 0;\n    int i;\n    for (i = 0; i < 8; i++) {\n        result = (uint8_t)((result << 1) | (x & 1u));\n        x >>= 1;\n    }\n    return result;\n}",
+      "explanation": "每次循环将 x 的最低位（LSB）追加到 result 的 LSB，同时将 result 左移一位（相当于将旧 LSB 推向高位）。循环8次后，x 的原 bit0 成为 result 的 bit7，bit7 成为 result 的 bit0，完成位序翻转。时间复杂度 O(1)（常数8次），无需查表。\n\nEach iteration appends the LSB of x to the LSB of result while shifting result left, effectively pushing prior bits toward higher positions. After 8 iterations, x's original bit 0 is at result's bit 7 and vice versa. O(1) time, no lookup table required."
+    },
+    "explanation": "编程题：完整解析见 answer.explanation 字段。/ Code question: full rationale is in answer.explanation.",
+    "tags": ["bit-manipulation", "reverse", "loop", "uint8_t"]
+  }
+]

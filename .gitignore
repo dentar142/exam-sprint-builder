@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+
+# Build / extraction scratch (the skill writes user output OUTSIDE this repo,
+# but ignore any local test artifacts just in case)
+frames/
+*.wav
+transcript.txt
+*-考前冲刺/
+out/
+tmp/
+
+# Whisper model cache
+.cache/

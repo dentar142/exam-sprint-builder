@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>刷题 · Material 3</title>
+<script>
+/* anti-flash: set theme before first paint (shared key) */
+(function(){try{var t=localStorage.getItem('esb-theme');
+if(!t)t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+</script>
+<style>
+/* ===== Material 3 (Material You) — green tonal seed ===== */
+:root,[data-theme="light"]{
+  --primary:#386A20;--on-primary:#FFFFFF;--primary-container:#B7F397;--on-primary-container:#072100;
+  --secondary:#55624C;--on-secondary:#FFFFFF;--secondary-container:#D9E7CB;--on-secondary-container:#131F0D;
+  --tertiary:#19686A;--on-tertiary:#FFFFFF;--tertiary-container:#BCEBEC;--on-tertiary-container:#002021;
+  --error:#BA1A1A;--on-error:#FFFFFF;--error-container:#FFDAD6;--on-error-container:#410002;
+  --success:#386A20;--on-success:#FFFFFF;--success-container:#B7F397;--on-success-container:#072100;
+  --surface:#FDFDF6;--on-surface:#1A1C18;--surface-variant:#E1E4D5;--on-surface-variant:#44483E;
+  --outline:#74796D;--outline-variant:#C4C8BA;
+  --s-lowest:#FFFFFF;--s-low:#F7FAF0;--s-container:#F1F4E9;--s-high:#EBEEE3;--s-highest:#E5E9DE;
+  --inverse-surface:#2F312C;--inverse-on-surface:#F0F1E9;--scrim:rgba(0,0,0,.4);
+  --shadow:0 1px 3px 1px rgba(0,0,0,.10),0 1px 2px rgba(0,0,0,.18);
+  --shadow-2:0 2px 6px 2px rgba(0,0,0,.10),0 1px 2px rgba(0,0,0,.18);
+}
+[data-theme="dark"]{
+  --primary:#9CD67D;--on-primary:#0A3900;--primary-container:#215107;--on-primary-container:#B7F397;
+  --secondary:#BDCBB0;--on-secondary:#283420;--secondary-container:#3E4A35;--on-secondary-container:#D9E7CB;
+  --tertiary:#A0CFD0;--on-tertiary:#003739;--tertiary-container:#004F51;--on-tertiary-container:#BCEBEC;
+  --error:#FFB4AB;--on-error:#690005;--error-container:#93000A;--on-error-container:#FFDAD6;
+  --success:#9CD67D;--on-success:#0A3900;--success-container:#215107;--on-success-container:#B7F397;
+  --surface:#1A1C18;--on-surface:#E3E3DB;--surface-variant:#44483E;--on-surface-variant:#C5C8BA;
+  --outline:#8E9285;--outline-variant:#44483E;
+  --s-lowest:#12140F;--s-low:#1A1C18;--s-container:#1E201B;--s-high:#282B25;--s-highest:#333530;
+  --inverse-surface:#E3E3DB;--inverse-on-surface:#2F312C;--scrim:rgba(0,0,0,.6);
+  --shadow:0 1px 3px 1px rgba(0,0,0,.45),0 1px 2px rgba(0,0,0,.5);
+  --shadow-2:0 2px 6px 2px rgba(0,0,0,.45),0 1px 2px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--surface);color:var(--on-surface);
+  font-family:"Google Sans","Roboto","Segoe UI Variable","Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;
+  line-height:1.6;font-size:15px;transition:background .3s,color .3s;-webkit-font-smoothing:antialiased}
+.shell{max-width:760px;margin:0 auto;padding:0 14px 120px}
+.appbar{position:sticky;top:0;z-index:20;background:var(--surface);display:flex;align-items:center;gap:8px;
+  padding:12px 16px 10px;border-bottom:1px solid var(--outline-variant)}
+.appbar .title{font-size:1.22rem;font-weight:600;letter-spacing:.1px;flex:1}
+.appbar .title b{color:var(--primary)}
+.iconbtn{width:42px;height:42px;border:none;border-radius:50%;background:transparent;color:var(--on-surface-variant);
+  cursor:pointer;font-size:1.18rem;display:grid;place-items:center;position:relative;overflow:hidden;transition:background .2s}
+.iconbtn:hover{background:color-mix(in srgb,var(--on-surface) 8%,transparent)}
+.modes{display:flex;margin:14px 0 6px;border:1px solid var(--outline);border-radius:22px;overflow-x:auto;
+  background:var(--surface);scrollbar-width:none}
+.modes::-webkit-scrollbar{display:none}
+.seg{flex:0 0 auto;min-width:62px;border:none;background:transparent;color:var(--on-surface);cursor:pointer;
+  padding:10px 16px;font-size:.85rem;font-weight:500;position:relative;overflow:hidden;white-space:nowrap;
+  transition:background .2s;border-right:1px solid var(--outline-variant)}
+.seg:last-child{border-right:none}
+.seg.active{background:var(--secondary-container);color:var(--on-secondary-container)}
+.seg.active::before{content:"\2714  ";font-size:.8em}
+.seg:hover:not(.active){background:color-mix(in srgb,var(--on-surface) 8%,transparent)}
+.statsbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0}
+.statchip{background:var(--s-container);color:var(--on-surface-variant);border-radius:999px;padding:6px 13px;font-size:.82rem;font-weight:500}
+.statchip b{color:var(--primary);font-size:1rem}
+.statchip.acc b{color:var(--success)}
+.grow{flex:1}
+.tbtn{border:1px solid var(--outline);background:transparent;color:var(--primary);border-radius:999px;
+  padding:7px 14px;font-size:.82rem;font-weight:600;cursor:pointer;position:relative;overflow:hidden}
+.tbtn:hover{background:color-mix(in srgb,var(--primary) 8%,transparent)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:6px 2px 12px;scrollbar-width:thin}
+.chip{flex:0 0 auto;border:1px solid var(--outline);background:transparent;color:var(--on-surface-variant);
+  border-radius:8px;padding:7px 13px;font-size:.82rem;cursor:pointer;white-space:nowrap;position:relative;overflow:hidden;transition:.2s}
+.chip:hover{background:color-mix(in srgb,var(--on-surface) 8%,transparent)}
+.chip.sel{background:var(--secondary-container);color:var(--on-secondary-container);border-color:transparent}
+.chip.sel::before{content:"\2714  "}
+.card{background:var(--s-low);border-radius:26px;padding:22px 22px 20px;box-shadow:var(--shadow);margin:6px 0}
+.qhead{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.qhead .pos{font-size:.8rem;color:var(--on-surface-variant);font-weight:500}
+.tagchip{background:var(--tertiary-container);color:var(--on-tertiary-container);border-radius:8px;padding:3px 10px;font-size:.74rem;font-weight:500}
+.chchip{background:var(--primary-container);color:var(--on-primary-container);border-radius:8px;padding:3px 10px;font-size:.74rem;font-weight:500}
+.qtype{font-size:.74rem;color:var(--on-surface-variant)}
+.starbtn{margin-left:auto;border:none;background:transparent;cursor:pointer;font-size:1.25rem;line-height:1;
+  color:var(--outline);padding:2px 4px;border-radius:8px;transition:.15s}
+.starbtn.on{color:#E8A300}
+.starbtn:hover{background:color-mix(in srgb,var(--on-surface) 8%,transparent)}
+.qtext{font-size:1.06rem;font-weight:500;line-height:1.55;margin:10px 0 16px;white-space:pre-wrap}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{display:flex;align-items:flex-start;gap:12px;border:1.5px solid var(--outline-variant);border-radius:16px;
+  padding:13px 15px;cursor:pointer;position:relative;overflow:hidden;transition:.15s;background:var(--surface)}
+.opt:hover{background:color-mix(in srgb,var(--on-surface) 6%,transparent)}
+.opt .mk{width:26px;height:26px;flex:0 0 auto;border-radius:50%;border:2px solid var(--outline);display:grid;place-items:center;
+  font-size:.8rem;font-weight:700;color:var(--on-surface-variant);transition:.15s}
+.opt.picked{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 10%,transparent)}
+.opt.picked .mk{border-color:var(--primary);background:var(--primary);color:var(--on-primary)}
+.opt.correct{border-color:var(--success);background:var(--success-container);color:var(--on-success-container)}
+.opt.correct .mk{border-color:var(--success);background:var(--success);color:var(--on-success)}
+.opt.wrong{border-color:var(--error);background:var(--error-container);color:var(--on-error-container)}
+.opt.wrong .mk{border-color:var(--error);background:var(--error);color:var(--on-error)}
+.opt .otext{flex:1;padding-top:2px}
+.opt.locked{cursor:default}
+.opt.locked:hover{background:var(--surface)}
+.opt.correct.locked:hover{background:var(--success-container)}
+.opt.wrong.locked:hover{background:var(--error-container)}
+.field{width:100%;border:1.5px solid var(--outline);border-radius:14px;background:transparent;color:var(--on-surface);
+  padding:14px 15px;font-size:1rem;font-family:inherit;transition:.15s;resize:vertical}
+.field:focus{outline:none;border-color:var(--primary);border-width:2px;padding:13px 14px}
+textarea.field{min-height:120px;line-height:1.6}
+.reveal{margin-top:16px;border-radius:18px;padding:14px 16px;font-size:.92rem;line-height:1.6}
+.reveal.ok{background:var(--success-container);color:var(--on-success-container)}
+.reveal.no{background:var(--error-container);color:var(--on-error-container)}
+.reveal.info{background:var(--secondary-container);color:var(--on-secondary-container)}
+.reveal .lab{font-weight:700;display:block;margin-bottom:3px}
+.reveal code{background:color-mix(in srgb,var(--on-surface) 12%,transparent);padding:.05em .4em;border-radius:5px;font-family:"Roboto Mono","Cascadia Code","Consolas",monospace}
+.refans{white-space:pre-wrap}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;align-items:center}
+.btn{border:none;border-radius:999px;padding:11px 22px;font-size:.92rem;font-weight:600;cursor:pointer;
+  position:relative;overflow:hidden;font-family:inherit;transition:filter .15s,box-shadow .2s}
+.btn.filled{background:var(--primary);color:var(--on-primary)}
+.btn.tonal{background:var(--secondary-container);color:var(--on-secondary-container)}
+.btn.outlined{background:transparent;color:var(--primary);border:1.5px solid var(--outline)}
+.btn.text{background:transparent;color:var(--primary);padding:11px 14px}
+.btn:hover{filter:brightness(1.04);box-shadow:var(--shadow)}
+.btn[disabled]{opacity:.4;cursor:default;box-shadow:none;filter:none}
+.selfscore{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.prog{height:5px;border-radius:999px;background:var(--surface-variant);overflow:hidden;margin:14px 0 4px}
+.prog>i{display:block;height:100%;background:var(--primary);border-radius:999px;transition:width .3s}
+.fills{display:flex;flex-direction:column;gap:9px}
+.blanklab{font-weight:600;color:var(--on-surface-variant);font-size:.85rem;margin-top:4px}
+.hint{font-size:.78rem;color:var(--on-surface-variant);margin:9px 2px 0;opacity:.85}
+.empty{text-align:center;padding:60px 20px;color:var(--on-surface-variant)}
+.empty .big{font-size:3rem;margin-bottom:10px}
+.empty code{background:var(--s-container);padding:.15em .5em;border-radius:6px;font-family:"Roboto Mono","Consolas",monospace;font-size:.85em}
+.sheet-scrim{position:fixed;inset:0;background:var(--scrim);z-index:40;display:none}
+.sheet-scrim.open{display:block}
+.sheet{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(640px,100%);z-index:41;
+  background:var(--s-high);border-radius:28px 28px 0 0;padding:10px 22px 30px;box-shadow:var(--shadow-2);
+  max-height:82vh;overflow:auto;display:none}
+.sheet.open{display:block;animation:up .25s ease}
+@keyframes up{from{transform:translate(-50%,40px);opacity:.4}to{transform:translate(-50%,0);opacity:1}}
+.sheet .handle{width:36px;height:4px;background:var(--outline-variant);border-radius:9px;margin:6px auto 14px}
+.sheet h3{margin:6px 0 14px;font-size:1.15rem}
+.srow{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--outline-variant);font-size:.94rem}
+.srow .v{font-weight:700}
+.bigacc{text-align:center;margin:6px 0 18px}
+.bigacc .n{font-size:2.6rem;font-weight:700;color:var(--success);line-height:1.1}
+.bigacc .l{color:var(--on-surface-variant);font-size:.85rem}
+.fab{position:fixed;right:max(18px,calc(50% - 380px + 18px));bottom:26px;z-index:30;
+  background:var(--primary-container);color:var(--on-primary-container);border:none;border-radius:18px;
+  padding:16px 22px;font-size:.95rem;font-weight:600;cursor:pointer;box-shadow:var(--shadow-2);
+  display:flex;align-items:center;gap:9px;font-family:inherit;overflow:hidden}
+.fab:hover{filter:brightness(1.05)}
+.ripple{position:absolute;border-radius:50%;transform:scale(0);background:currentColor;opacity:.22;pointer-events:none;animation:rip .55s linear}
+@keyframes rip{to{transform:scale(2.6);opacity:0}}
+.snackbar{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);z-index:50;
+  background:var(--inverse-surface);color:var(--inverse-on-surface);padding:13px 18px;border-radius:10px;
+  font-size:.88rem;box-shadow:var(--shadow-2);opacity:0;pointer-events:none;transition:.25s;max-width:90vw}
+.snackbar.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:560px){.shell{padding:0 10px 120px}.appbar .title{font-size:1.06rem}
+  .card{padding:18px 16px;border-radius:22px}.seg{font-size:.78rem;padding:9px 11px}.fab{right:16px}}
+</style>
+</head>
+<body>
+<div class="appbar">
+  <div class="title">刷题 · <b>Material 3</b></div>
+  <button class="iconbtn" id="statsBtn" title="统计 / Stats">&#128202;</button>
+  <button class="iconbtn" id="themeBtn" title="切换主题 / Theme">&#127769;</button>
+</div>
+
+<div class="shell">
+  <div class="modes" id="modes">
+    <button class="seg" data-mode="single">单选</button>
+    <button class="seg" data-mode="fill">填空</button>
+    <button class="seg" data-mode="short">简答</button>
+    <button class="seg" data-mode="mixed">混合</button>
+    <button class="seg" data-mode="starred">&#11088; 收藏</button>
+    <button class="seg" data-mode="wrong">错题本</button>
+  </div>
+
+  <div class="statsbar">
+    <span class="statchip">题量 <b id="poolCount">0</b></span>
+    <span class="statchip">已答 <b id="ansCount">0</b></span>
+    <span class="statchip acc">正确率 <b id="accPct">--</b></span>
+    <span class="grow"></span>
+    <button class="tbtn" id="resetBtn">清空记录</button>
+  </div>
+
+  <div class="chips" id="chips"></div>
+  <div class="prog"><i id="progBar" style="width:0"></i></div>
+  <div id="stage"></div>
+</div>
+
+<button class="fab" id="randFab">&#127922; 随机一题</button>
+
+<div class="sheet-scrim" id="sheetScrim"></div>
+<div class="sheet" id="sheet">
+  <div class="handle"></div>
+  <h3>&#128202; 答题统计</h3>
+  <div class="bigacc"><div class="n" id="bigAcc">--</div><div class="l">总正确率</div></div>
+  <div class="srow"><span>已答题数</span><span class="v" id="s-ans">0</span></div>
+  <div class="srow"><span>答对</span><span class="v" id="s-cor">0</span></div>
+  <div class="srow"><span>答错</span><span class="v" id="s-wrong">0</span></div>
+  <div class="srow"><span>单选正确率</span><span class="v" id="s-single">--</span></div>
+  <div class="srow"><span>填空正确率</span><span class="v" id="s-fill">--</span></div>
+  <div class="srow"><span>简答（自评）正确率</span><span class="v" id="s-short">--</span></div>
+  <div class="srow"><span>收藏 &#11088;</span><span class="v" id="s-star">0</span></div>
+  <div class="srow"><span>错题本</span><span class="v" id="s-wrongbook">0</span></div>
+  <div class="actions"><button class="btn tonal" id="closeSheet">关闭</button></div>
+</div>
+
+<div class="snackbar" id="snack"></div>
+
+<script>
+/* ===== Question bank (injected at build time) ===== */
+const BANK = [{"id":"demo_q001","type":"single","chapter":"第1章 数制与编码 / Chapter 1 — Number Systems","stem":"二进制数 `10110011` 对应的十六进制值是？\nWhat is the hexadecimal value of binary `10110011`?","options":["0xA3","0xB3","0xC3","0x33"],"answer":1,"explanation":"将二进制按4位一组分割：1011 = B，0011 = 3，合并得 0xB3。\nSplit into nibbles: 1011 = B, 0011 = 3 → 0xB3.","tags":["number-system","hex","binary"]},{"id":"demo_q002","type":"single","chapter":"第1章 数制与编码 / Chapter 1 — Number Systems","stem":"在 C 语言中，表达式 `(signed char)0xFF > 0` 的结果是？\nIn C, what is the result of `(signed char)0xFF > 0`?","options":["假（false）","真（true）","未定义行为 / undefined behavior","编译错误 / compile error"],"answer":0,"explanation":"在二补数表示法中，`0xFF` 强转为 `signed char` 得 −1，−1 > 0 为假。\nIn two's-complement, `(signed char)0xFF` = −1. −1 > 0 is false.","tags":["signed","unsigned","cast","two's-complement"]},{"id":"demo_q003","type":"single","chapter":"第2章 MCU 体系结构 / Chapter 2 — MCU Architecture","stem":"在典型 8 位 MCU 中，程序计数器存储在哪个寄存器？\nWhich register holds the program counter in a typical 8-bit MCU?","options":["ACC（累加器）","PC（程序计数器）","SP（堆栈指针）","DPTR（数据指针）"],"answer":1,"explanation":"PC（Program Counter）存储下一条待执行指令的地址；SP 是堆栈指针；ACC 是累加器；DPTR 是16位数据指针。\nPC (Program Counter) holds the address of the next instruction to fetch. SP is the stack pointer; ACC the accumulator; DPTR the 16-bit data pointer.","tags":["registers","architecture","PC"]},{"id":"demo_q004","type":"single","chapter":"第3章 串行通信 / Chapter 3 — Serial Communication","stem":"UART 通信中，收发双方波特率不匹配通常会导致什么现象？\nIn UART communication, a baud-rate mismatch between sender and receiver typically causes?","options":["总线竞争 / bus contention","堆栈溢出 / stack overflow","时钟漂移 / clock drift","乱码输出 / garbled output"],"answer":3,"explanation":"波特率决定每个符号的持续时间。不匹配时接收端采样点偏移，位判决错误，输出乱码。\nBaud rate determines symbol duration. A mismatch shifts the receiver's sampling point, causing bit-decision errors and garbled output.","tags":["UART","baud-rate","serial"]},{"id":"demo_q005","type":"multi","chapter":"第2章 MCU 体系结构 / Chapter 2 — MCU Architecture","stem":"以下哪些属于典型 MCU 的合法中断源？（多选）\nWhich of the following are valid interrupt sources in a typical MCU? (select all that apply)","options":["定时器溢出 / Timer overflow","ADC 转换完成 / ADC conversion complete","外部引脚边沿 / External pin edge","CPU 寄存器溢出 / CPU register overflow"],"answer":[0,1,2],"explanation":"定时器溢出、外部引脚边沿触发（INT0/INT1）、ADC 转换完成都是标准中断源。CPU 寄存器本身不产生溢出中断（算术溢出仅影响标志位）。\nTimer overflow, external edge interrupts, and ADC-complete are standard MCU interrupt sources. CPU register arithmetic overflow only sets a flag — it does not trigger an interrupt vector.","tags":["interrupt","timer","ADC","external-interrupt"]},{"id":"demo_q006","type":"multi","chapter":"第3章 串行通信 / Chapter 3 — Serial Communication","stem":"关于 SPI 协议，以下哪些描述正确？（多选）\nWhich statements about the SPI protocol are correct? (select all that apply)","options":["半双工，无法同时收发 / Half-duplex only","时钟由主机提供 / Clock is provided by the master","使用片选信号区分从机 / Uses chip-select to address slaves","全双工，可同时收发 / Full-duplex: simultaneous send and receive"],"answer":[1,2,3],"explanation":"SPI 使用 MOSI/MISO/SCK/CS 四线，支持全双工；主机产生时钟；片选低电平激活对应从机。选项C（半双工）错误。\nSPI uses MOSI, MISO, SCK, and CS. It is full-duplex; the master drives SCK; CS selects the active slave. Option C (half-duplex) is incorrect.","tags":["SPI","full-duplex","serial"]},{"id":"demo_q007","type":"fill","chapter":"第1章 数制与编码 / Chapter 1 — Number Systems","stem":"字符 `'A'` 的 ASCII 码（十进制）是 ___。\nThe decimal ASCII code of character `'A'` is ___.","answer":[["65"]],"explanation":"ASCII 表中大写字母 A 的编码为 65（十进制）= 0x41（十六进制）。\n'A' = 65 decimal = 0x41 hexadecimal in the ASCII table.","tags":["ASCII","encoding"]},{"id":"demo_q008","type":"fill","chapter":"第3章 串行通信 / Chapter 3 — Serial Communication","stem":"I²C 总线在不含电源线的情况下使用 ___ 根信号线；其中数据线称为 ___。\nThe I²C bus uses ___ signal wires (excluding power). The data line is called ___.","answer":[["2"],["SDA"]],"explanation":"I²C 只需 SDA（数据）和 SCL（时钟）两根线，支持多主多从，通过地址区分设备。\nI²C requires only two wires: SDA (data) and SCL (clock). It supports multi-master and multi-slave with address-based arbitration.","tags":["I2C","SDA","SCL","serial"]},{"id":"demo_q009","type":"fill","chapter":"第4章 位操作 / Chapter 4 — Bit Manipulation","stem":"将变量 `x` 的第 4 位（从第 0 位起计）置 1 且不影响其他位，正确的 C 表达式为 `x ___= ___`。\nTo set bit 4 (0-indexed) of `x` without changing other bits, fill in: `x ___= ___`.","answer":[["|"],["0x10","1<<4","(1<<4)"]],"explanation":"使用按位或（|）配合掩码 0x10（即 1<<4）将第4位置1，其余位保持不变。用 &= ~mask 可清零同一位。\nBitwise OR (|) with mask 0x10 (= 1<<4) sets bit 4 without disturbing others. To clear the same bit: x &= ~(1<<4).","tags":["bit-manipulation","mask","OR"]},{"id":"demo_q010","type":"short","chapter":"第2章 MCU 体系结构 / Chapter 2 — MCU Architecture","stem":"请简述轮询 I/O 与中断驱动 I/O 的区别，并各举一个适合的应用场景。\nBriefly explain the difference between polling I/O and interrupt-driven I/O, and give one suitable use case for each.","answer":"轮询（Polling）：CPU 持续检查外设状态寄存器直至就绪，实现简单，响应延迟固定，但占用全部 CPU 时间，不适合多任务。适合：对时序要求极严格、事件极频繁的简单系统（如高速 ADC 采样循环）。\n\n中断驱动（Interrupt-driven）：外设就绪时主动向 CPU 发送中断请求，CPU 执行 ISR 后返回主程序，可在等待期间处理其他任务，CPU 利用率高。适合：事件稀少或不定时（如按键、UART 接收）、需要后台运行其他任务的系统。\n\n---\nPolling: the CPU continuously reads a status register until the peripheral signals readiness. Simple to implement, deterministic latency, but wastes CPU cycles. Use case: a tight high-speed ADC sampling loop where every cycle matters.\n\nInterrupt-driven: the peripheral asserts an interrupt request when ready; the CPU suspends current work, runs the ISR, then resumes. CPU is free for other tasks between events. Use case: UART receive or a debounced keypad scan, where events are infrequent and the main loop must do other work.","explanation":"简答题：答案即为参考解析，由教师对照评分。/ Short-answer: the answer field is the model response; graded by the instructor.","tags":["polling","interrupt","IO"]},{"id":"demo_q011","type":"short","chapter":"第2章 MCU 体系结构 / Chapter 2 — MCU Architecture","stem":"描述函数调用时栈的变化过程（以典型向下生长的栈为例，说明 SP 和栈内容的变化）。\nDescribe the stack changes during a function call (assume a downward-growing stack; describe SP and stack contents).","answer":"调用（CALL）时：\n1. 将下一条指令的地址（返回地址 = PC + 指令长度）压入栈顶，SP 减小。\n2. 函数序言（prologue）将需要保护的寄存器逐一压栈，SP 继续减小。\n3. 为局部变量在栈上分配空间（SP -= 局部变量总字节数）。\n\n返回（RET）时：\n1. 释放局部变量空间（SP += 局部变量总字节数）。\n2. 从栈中弹出已保存的寄存器，SP 增大。\n3. 弹出返回地址装入 PC，SP 恢复到 CALL 之前的值，控制流回到调用者。\n\n---\nOn CALL:\n1. The return address (PC + instruction size) is pushed onto the stack; SP decrements.\n2. The function prologue saves caller-saved registers onto the stack; SP decrements further.\n3. Stack space for local variables is allocated (SP -= locals size).\n\nOn RET:\n1. Local variable space is freed (SP += locals size).\n2. Saved registers are popped; SP increments.\n3. The return address is popped into PC; SP is fully restored to its pre-call value.","explanation":"简答题：答案即为参考解析，由教师对照评分。/ Short-answer: the answer field is the model response; graded by the instructor.","tags":["stack","function-call","SP","return-address"]},{"id":"demo_q012","type":"code","chapter":"第4章 位操作 / Chapter 4 — Bit Manipulation","stem":"请编写 C 函数 `uint8_t reverse_bits(uint8_t x)`，返回字节 x 的位序翻转结果（bit 0 与 bit 7 互换，bit 1 与 bit 6 互换，以此类推）。\nWrite a C function `uint8_t reverse_bits(uint8_t x)` that reverses the bit order of a byte (bit 0 ↔ bit 7, bit 1 ↔ bit 6, etc.).","answer":{"code":"#include <stdint.h>\n\nuint8_t reverse_bits(uint8_t x) {\n    uint8_t result = 0;\n    int i;\n    for (i = 0; i < 8; i++) {\n        result = (uint8_t)((result << 1) | (x & 1u));\n        x >>= 1;\n    }\n    return result;\n}","explanation":"每次循环将 x 的最低位（LSB）追加到 result 的 LSB，同时将 result 左移一位（相当于将旧 LSB 推向高位）。循环8次后，x 的原 bit0 成为 result 的 bit7，bit7 成为 result 的 bit0，完成位序翻转。时间复杂度 O(1)（常数8次），无需查表。\n\nEach iteration appends the LSB of x to the LSB of result while shifting result left, effectively pushing prior bits toward higher positions. After 8 iterations, x's original bit 0 is at result's bit 7 and vice versa. O(1) time, no lookup table required."},"explanation":"编程题：完整解析见 answer.explanation 字段。/ Code question: full rationale is in answer.explanation.","tags":["bit-manipulation","reverse","loop","uint8_t"]}];
+
+/* ===== State & persistence ===== */
+const NS='esb-quiz-m3', THEME_KEY='esb-theme';
+let S=load();
+function load(){try{return Object.assign({answers:{},wrong:[],starred:[]},JSON.parse(localStorage.getItem(NS)||'{}'));}catch(e){return {answers:{},wrong:[],starred:[]};}}
+function save(){try{localStorage.setItem(NS,JSON.stringify(S));}catch(e){}}
+
+let mode='single', chapter='all', idx=0;
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+function esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function norm(s){return (s||'').toString().trim().toLowerCase().replace(/\s+/g,'').replace(/[。，,；;\.]/g,'');}
+function accepts(q,k){const v=q.answer[k];return Array.isArray(v)?v:[v];}
+const chapters=[...new Set(BANK.map(q=>q.chapter).filter(c=>c!=null&&c!==''))]
+  .sort((a,b)=>(typeof a==='number'&&typeof b==='number')?a-b:String(a).localeCompare(String(b),'zh'));
+
+function pool(){
+  let list;
+  if(mode==='wrong') list=BANK.filter(q=>S.wrong.includes(q.id));
+  else if(mode==='starred') list=BANK.filter(q=>S.starred.includes(q.id));
+  else if(mode==='mixed') list=BANK.slice();
+  else list=BANK.filter(q=>q.type===mode);
+  if(chapter!=='all'&&mode!=='wrong'&&mode!=='starred') list=list.filter(q=>String(q.chapter)===String(chapter));
+  return list;
+}
+function typeName(t){return t==='single'?'单项选择':t==='fill'?'填空':t==='short'?'简答':t;}
+
+/* ===== Chips ===== */
+function renderChips(){
+  const box=$('#chips'); box.innerHTML='';
+  if(mode==='wrong'||mode==='starred'||!chapters.length){box.style.display='none';return;}
+  box.style.display='flex';
+  const mk=(val,label)=>{const b=document.createElement('button');
+    b.className='chip'+(String(chapter)===String(val)?' sel':'');b.textContent=label;
+    b.onclick=()=>{chapter=val;idx=0;renderChips();renderStage();};ripple(b);box.appendChild(b);};
+  mk('all','全部');
+  chapters.forEach(c=>mk(c, isNaN(c)?String(c):('第'+c+'章')));
+}
+
+/* ===== Empty-bank placeholder ===== */
+function bankEmpty(){
+  return '<div class="empty"><div class="big">&#128229;</div>'+
+    '<div style="font-size:1.05rem;font-weight:600;margin-bottom:6px">示例题库为空</div>'+
+    '<div>把题库 JSON 注入模板里的 <code>BANK</code> 数组占位符即可开始刷题。<br>'+
+    'Inject a bank into the <code>BANK</code> placeholder to begin.</div></div>';
+}
+
+/* ===== Stage ===== */
+function renderStage(){
+  const stage=$('#stage');
+  if(!BANK.length){stage.innerHTML=bankEmpty();$('#poolCount').textContent=0;$('#progBar').style.width='0';updateStats();return;}
+  const list=pool();
+  $('#poolCount').textContent=list.length;
+  if(idx>=list.length) idx=0;
+  updateStats();
+  if(list.length===0){
+    stage.innerHTML='<div class="empty"><div class="big">'+(mode==='wrong'?'\u{1F389}':(mode==='starred'?'⭐':'\u{1F4ED}'))+'</div>'+
+      (mode==='wrong'?'错题本是空的，继续保持！':mode==='starred'?'还没有收藏题目，点题目右上角 &#9734; 收藏':'该筛选下暂无题目')+'</div>';
+    $('#progBar').style.width='0';return;
+  }
+  $('#progBar').style.width=((idx+1)/list.length*100)+'%';
+  const q=list[idx], rec=S.answers[q.id], starred=S.starred.includes(q.id);
+  let html='<div class="card"><div class="qhead">'+
+    '<span class="pos">'+(idx+1)+' / '+list.length+'</span>'+
+    (q.chapter!=null&&q.chapter!==''?'<span class="chchip">'+(isNaN(q.chapter)?esc(q.chapter):'第'+esc(q.chapter)+'章')+'</span>':'')+
+    (Array.isArray(q.tags)?q.tags.map(t=>'<span class="tagchip">'+esc(t)+'</span>').join(''):'')+
+    '<span class="qtype">'+typeName(q.type)+'</span>'+
+    '<button class="starbtn'+(starred?' on':'')+'" id="starBtn" title="收藏">'+(starred?'★':'☆')+'</button></div>'+
+    '<div class="qtext">'+esc(q.stem)+'</div>';
+
+  if(q.type==='single'){
+    html+='<div class="opts" id="opts">';
+    (q.options||[]).forEach((o,i)=>{
+      let cls='opt';
+      if(rec){cls+=' locked';if(i===q.answer)cls+=' correct';else if(i===rec.picked)cls+=' wrong';}
+      html+='<div class="'+cls+'" data-i="'+i+'"><div class="mk">'+'ABCDEFGH'[i]+'</div><div class="otext">'+esc(o)+'</div></div>';
+    });
+    html+='</div>';
+    if(!rec) html+='<div class="hint">点选项即时判分 · tap to answer</div>'; else html+=resultBlock(q,rec.correct);
+    html+='<div id="ansReveal"></div>'+navRow(!!rec, q.type, list);
+  }else if(q.type==='fill'){
+    const blanks=Array.isArray(q.answer)?q.answer.length:1;
+    const picked=(rec&&Array.isArray(rec.picked))?rec.picked:[];
+    html+='<div class="fills">';
+    for(let k=0;k<blanks;k++){
+      html+=(blanks>1?'<span class="blanklab">('+(k+1)+')</span>':'')+
+        '<input class="field fillInput" data-k="'+k+'" placeholder="填空'+(blanks>1?(' '+(k+1)):'')+'…" value="'+esc(picked[k]||'')+'" '+(rec?'disabled':'')+'>';
+    }
+    html+='</div>';
+    if(!rec) html+='<div class="hint">回车即时判分 · Enter to check</div>'; else html+=resultBlock(q,rec.correct);
+    html+='<div id="ansReveal"></div>'+navRow(!!rec, q.type, list);
+  }else{ /* short */
+    const val=rec&&rec.text?esc(rec.text):'';
+    html+='<textarea class="field" id="shortInput" placeholder="写下你的作答要点…">'+val+'</textarea>';
+    html+='<div id="shortReveal">'+(rec?shortRefBlock(q)+selfScoreRow(rec):'')+'</div>'+navRow(false, q.type, list, true);
+  }
+  html+='</div>';
+  stage.innerHTML=html;
+  bind(q,list);
+}
+
+function resultBlock(q,correct){
+  let h='<div class="reveal '+(correct?'ok':'no')+'"><span class="lab">'+(correct?'✓ 答对了':'✗ 答错了')+'</span>';
+  if(q.type==='single' && !correct) h+='正确答案：<b>'+'ABCDEFGH'[q.answer]+'</b>　';
+  if(q.type==='fill') h+='标准答案：'+q.answer.map((b,k)=>(q.answer.length>1?'('+(k+1)+') ':'')+'<code>'+esc(accepts(q,k)[0])+'</code>').join('　');
+  if(q.explanation) h+='<br><span class="lab" style="margin-top:6px">解析</span>'+esc(q.explanation);
+  return h+'</div>';
+}
+function shortRefBlock(q){
+  return '<div class="reveal info"><span class="lab">参考答案</span><div class="refans">'+esc(q.answer)+'</div>'+
+    (q.explanation?'<br><span class="lab" style="margin-top:8px">评分要点</span>'+esc(q.explanation):'')+'</div>';
+}
+function selfScoreRow(rec){const a=rec&&rec.correct===true,b=rec&&rec.correct===false;
+  return '<div class="selfscore"><button class="btn '+(a?'filled':'outlined')+'" data-self="1">我答对了</button>'+
+    '<button class="btn '+(b?'filled':'outlined')+'" data-self="0">没答对</button></div>';}
+function navRow(answered, type, list, isShort){
+  let h='<div class="actions">';
+  if(type==='fill' && !answered) h+='<button class="btn filled" id="submitBtn">提交</button>';
+  if(isShort) h+='<button class="btn tonal" id="revealBtn">显示参考答案</button>';
+  if((type==='single'||type==='fill') && !answered) h+='<button class="btn text" id="revealAnsBtn">&#128161; 看答案</button>';
+  h+='<button class="btn outlined" id="prevBtn"'+(idx<=0?' disabled':'')+'>上一题</button>';
+  h+='<button class="btn outlined" id="nextBtn"'+(idx>=list.length-1?' disabled':'')+'>下一题</button></div>';
+  return h;
+}
+function showAnswer(q){
+  if(q.type==='single'){
+    $$('#opts .opt').forEach(el=>{el.classList.add('locked');el.onclick=null;if(Number(el.dataset.i)===q.answer)el.classList.add('correct');});
+    let h='<div class="reveal info"><span class="lab">正确答案：'+'ABCDEFGH'[q.answer]+'</span>';
+    if(q.explanation)h+=esc(q.explanation);
+    $('#ansReveal').innerHTML=h+'</div>';
+  }else if(q.type==='fill'){
+    $$('.fillInput').forEach(el=>el.disabled=true);
+    let h='<div class="reveal info"><span class="lab">参考答案</span>'+
+      q.answer.map((b,k)=>(q.answer.length>1?'('+(k+1)+') ':'')+'<code>'+esc(accepts(q,k)[0])+'</code>').join('　');
+    if(q.explanation)h+='<br>'+esc(q.explanation);
+    $('#ansReveal').innerHTML=h+'</div>';
+  }
+  const ra=$('#revealAnsBtn');if(ra)ra.remove();const sb=$('#submitBtn');if(sb)sb.remove();
+}
+
+/* ===== Binding ===== */
+function bind(q,list){
+  $$('.btn,.chip,.seg,.iconbtn,.tbtn,.opt,.fab,.starbtn').forEach(ripple);
+  const prev=$('#prevBtn'),next=$('#nextBtn');
+  if(prev)prev.onclick=()=>{if(idx>0){idx--;renderStage();}};
+  if(next)next.onclick=()=>{if(idx<list.length-1){idx++;renderStage();}};
+  const sb=$('#starBtn');if(sb)sb.onclick=()=>{toggleStar(q.id);renderStage();};
+
+  if(q.type==='single'){
+    if(!S.answers[q.id]){
+      $$('#opts .opt').forEach(el=>el.onclick=()=>{const p=Number(el.dataset.i);record(q,{picked:p,correct:p===q.answer});renderStage();});
+      const ra=$('#revealAnsBtn');if(ra)ra.onclick=()=>showAnswer(q);
+    }
+  }else if(q.type==='fill'){
+    if(!S.answers[q.id]){
+      const submit=()=>{const inputs=$$('.fillInput').map(el=>el.value);
+        if(inputs.every(v=>!v.trim())){snack('请先填写答案');return;}
+        record(q,{picked:inputs,correct:q.answer.every((b,k)=>accepts(q,k).some(a=>norm(a)===norm(inputs[k]||'')))});
+        renderStage();};
+      const s=$('#submitBtn');if(s)s.onclick=submit;
+      $$('.fillInput').forEach(el=>el.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();submit();}}));
+      const ra=$('#revealAnsBtn');if(ra)ra.onclick=()=>showAnswer(q);
+    }
+  }else{ /* short */
+    const rv=$('#revealBtn');
+    if(rv)rv.onclick=()=>{
+      const text=($('#shortInput')&&$('#shortInput').value)||'';
+      const prev=S.answers[q.id]||{};
+      S.answers[q.id]={text,correct:(prev.correct===true||prev.correct===false)?prev.correct:undefined};save();
+      $('#shortReveal').innerHTML=shortRefBlock(q)+selfScoreRow(S.answers[q.id]);bindSelf(q);};
+    bindSelf(q);
+  }
+}
+function bindSelf(q){
+  $$('#shortReveal [data-self]').forEach(b=>{ripple(b);b.onclick=()=>{
+    const correct=b.dataset.self==='1';
+    const text=($('#shortInput')&&$('#shortInput').value)||(S.answers[q.id]&&S.answers[q.id].text)||'';
+    record(q,{text,correct},true);
+    $('#shortReveal').innerHTML=shortRefBlock(q)+selfScoreRow(S.answers[q.id]);bindSelf(q);updateStats();};});
+}
+function toggleStar(id){const i=S.starred.indexOf(id);if(i<0){S.starred.push(id);snack('已收藏 ⭐');}else{S.starred.splice(i,1);}save();}
+function record(q,data,isShort){
+  S.answers[q.id]=Object.assign({},S.answers[q.id],data);
+  const wi=S.wrong.indexOf(q.id);
+  if(data.correct===false){if(wi<0)S.wrong.push(q.id);}
+  else if(data.correct===true){if(wi>=0)S.wrong.splice(wi,1);}
+  save();updateStats();
+  if(!isShort&&data.correct===false)snack('已加入错题本');
+}
+
+/* ===== Stats ===== */
+function stats(){
+  let ans=0,cor=0;const by={single:[0,0],fill:[0,0],short:[0,0]};
+  for(const id in S.answers){const r=S.answers[id],q=BANK.find(x=>x.id===id);if(!q)continue;
+    if(r.correct===true||r.correct===false){ans++;if(by[q.type])by[q.type][1]++;if(r.correct){cor++;if(by[q.type])by[q.type][0]++;}}}
+  return {ans,cor,wrong:ans-cor,by};
+}
+function pct(a,b){return b?Math.round(a/b*100)+'%':'--';}
+function updateStats(){
+  const st=stats();
+  $('#ansCount').textContent=st.ans;
+  $('#accPct').textContent=st.ans?pct(st.cor,st.ans):'--';
+  $('#bigAcc').textContent=st.ans?pct(st.cor,st.ans):'--';
+  $('#s-ans').textContent=st.ans;$('#s-cor').textContent=st.cor;$('#s-wrong').textContent=st.wrong;
+  $('#s-single').textContent=pct(st.by.single[0],st.by.single[1]);
+  $('#s-fill').textContent=pct(st.by.fill[0],st.by.fill[1]);
+  $('#s-short').textContent=pct(st.by.short[0],st.by.short[1]);
+  $('#s-star').textContent=S.starred.length;
+  $('#s-wrongbook').textContent=S.wrong.length;
+}
+
+/* ===== Top interactions ===== */
+function setMode(m){mode=m;idx=0;$$('#modes .seg').forEach(s=>s.classList.toggle('active',s.dataset.mode===m));renderChips();renderStage();}
+$$('#modes .seg').forEach(s=>{ripple(s);s.onclick=()=>setMode(s.dataset.mode);});
+function applyTheme(t){document.documentElement.setAttribute('data-theme',t);$('#themeBtn').innerHTML=t==='dark'?'☀️':'\u{1F319}';try{localStorage.setItem(THEME_KEY,t);}catch(e){}}
+$('#themeBtn').onclick=()=>applyTheme((document.documentElement.getAttribute('data-theme')||'light')==='dark'?'light':'dark');
+$('#resetBtn').onclick=()=>{if(confirm('确定清空所有答题记录、错题本与收藏？')){S={answers:{},wrong:[],starred:[]};save();idx=0;renderStage();snack('已清空记录');}};
+$('#randFab').onclick=()=>{const list=pool();if(!list.length){snack('当前没有题目');return;}idx=Math.floor(Math.random()*list.length);renderStage();window.scrollTo({top:0,behavior:'smooth'});};
+$('#statsBtn').onclick=()=>{updateStats();openSheet(true);};
+$('#closeSheet').onclick=()=>openSheet(false);
+$('#sheetScrim').onclick=()=>openSheet(false);
+function openSheet(o){$('#sheet').classList.toggle('open',o);$('#sheetScrim').classList.toggle('open',o);}
+let snackT;function snack(m){const s=$('#snack');s.innerHTML=m;s.classList.add('show');clearTimeout(snackT);snackT=setTimeout(()=>s.classList.remove('show'),1800);}
+function ripple(el){if(el._rip)return;el._rip=1;el.addEventListener('click',e=>{
+  const r=document.createElement('span');r.className='ripple';const rect=el.getBoundingClientRect();const d=Math.max(rect.width,rect.height);
+  r.style.width=r.style.height=d+'px';r.style.left=(e.clientX-rect.left-d/2)+'px';r.style.top=(e.clientY-rect.top-d/2)+'px';
+  el.appendChild(r);setTimeout(()=>r.remove(),550);});}
+
+/* ===== Boot ===== */
+applyTheme(document.documentElement.getAttribute('data-theme')||'light');
+setMode('single');
+['#themeBtn','#statsBtn','#resetBtn','#randFab'].forEach(s=>ripple($(s)));
+</script>
+</body>
+</html>

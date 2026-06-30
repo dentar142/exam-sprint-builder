@@ -1,0 +1,157 @@
+/* =====================================================================
+   exam-sprint-builder · Warm theme tokens (素雅温暖 · light + dark)
+   ---------------------------------------------------------------------
+   Design language: paper-cream background (米黄) + warm-brown ink (暖棕)
+   + terracotta / amber accents (赤陶 / 琥珀). Soft radii, generous
+   whitespace, serif headings. Eye-friendly for long study sessions.
+
+   Pure CSS custom properties, no external dependencies — drop the whole
+   file into a <style> tag (or @import for online use) of any generated
+   page and it opens by double-click via file://.
+
+   Theme switching: light is the default (`:root` / `[data-theme="light"]`),
+   dark lives under `[data-theme="dark"]`. The toggle persists to the
+   SHARED localStorage key `esb-theme` so every generated page agrees.
+   See references/html-conventions.md for the anti-flash head script.
+   ===================================================================== */
+
+:root{
+  /* ---- Typography ---- */
+  --font-sans:  "Microsoft YaHei","PingFang SC","Segoe UI",system-ui,sans-serif;
+  --font-serif: "Noto Serif SC","Source Han Serif SC","Songti SC",Georgia,serif;
+  --font-mono:  "Cascadia Code","JetBrains Mono","Consolas","Courier New",monospace;
+  /* ---- Shape & motion ---- */
+  --radius:    14px;
+  --radius-sm:  9px;
+  --maxw:    1080px;
+  --speed:    .25s;
+}
+
+/* ---------- Light: warm paper ---------- */
+:root,
+[data-theme="light"]{
+  --bg:         #f6efe3;  /* warm cream base        暖米底   */
+  --bg-soft:    #efe5d4;  /* secondary base         次级底   */
+  --surface:    #fffaf2;  /* card / paper surface    卡片纸面 */
+  --surface-2:  #f3ebdc;  /* raised surface / header */
+  --ink:        #4a3b2c;  /* primary text (warm brown) 主墨字 */
+  --ink-soft:   #6f5e4c;  /* secondary text         次要文字 */
+  --ink-faint:  #9b8a76;  /* muted / captions       弱化注释 */
+  --line:       #e3d6c0;  /* borders / dividers     描边     */
+  --brand:      #c0612f;  /* terracotta accent      赤陶主色 */
+  --brand-2:    #b9892f;  /* amber secondary        琥珀辅色 */
+  --brand-soft: #f0d9c4;  /* accent tint background           */
+  --ok:         #5b7c52;  /* success (warm olive)   正确/通过 */
+  --ok-bg:      #dde7d2;  /* success tint                     */
+  --warn:       #b0552c;  /* warning red            警示赤   */
+  --warn-bg:    #f3d9cb;  /* warning tint                     */
+  --tip-bg:     #f5ead2;  /* tip / callout (warm yellow)      */
+  --code-bg:    #2f2722;  /* code block (deep warm)           */
+  --code-ink:   #f3e7d6;  /* code text                        */
+  --chip:       #ecd9c2;  /* pill / tag background            */
+  --shadow: 0 6px 24px rgba(90,64,40,.10), 0 2px 6px rgba(90,64,40,.06);
+}
+
+/* ---------- Dark: warm night ---------- */
+[data-theme="dark"]{
+  --bg:         #211b15;  /* warm charcoal          暖炭黑   */
+  --bg-soft:    #1b1611;
+  --surface:    #2b2219;  /* card                             */
+  --surface-2:  #332820;
+  --ink:        #f0e3d0;  /* warm off-white text    暖奶白字 */
+  --ink-soft:   #d4c3ac;
+  --ink-faint:  #a7937a;
+  --line:       #4a3c2d;
+  --brand:      #e8915a;  /* warm amber (brighter on dark)   */
+  --brand-2:    #e6b85c;
+  --brand-soft: #3c2c1d;
+  --ok:         #9cc081;
+  --ok-bg:      #2f3a26;
+  --warn:       #e8a06a;
+  --warn-bg:    #3e2a1d;
+  --tip-bg:     #3a2e1d;
+  --code-bg:    #15110d;
+  --code-ink:   #f0e0c8;
+  --chip:       #3a2d20;
+  --shadow: 0 8px 28px rgba(0,0,0,.45), 0 2px 8px rgba(0,0,0,.3);
+}
+
+/* =====================================================================
+   Generic base styles — optional, but every token above is exercised
+   here so a page can use this file alone and still look finished.
+   ===================================================================== */
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--font-sans);
+  line-height:1.75;
+  font-size:16px;
+  transition:background var(--speed),color var(--speed);
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--font-serif);color:var(--ink);line-height:1.4;font-weight:700}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+code,kbd{
+  font-family:var(--font-mono);
+  background:var(--surface-2);
+  color:var(--brand);
+  padding:.08em .4em;
+  border-radius:6px;
+  font-size:.92em;
+}
+pre{
+  background:var(--code-bg);
+  color:var(--code-ink);
+  font-family:var(--font-mono);
+  padding:18px 20px;
+  border-radius:var(--radius);
+  overflow:auto;
+  line-height:1.6;
+  font-size:14px;
+  box-shadow:var(--shadow);
+}
+pre code{background:none;color:inherit;padding:0}
+.card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+table{border-collapse:collapse;width:100%;background:var(--surface);border-radius:var(--radius);overflow:hidden}
+th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:var(--surface-2);color:var(--brand)}
+.chip{
+  display:inline-block;
+  background:var(--chip);
+  color:var(--ink-soft);
+  border-radius:999px;
+  padding:2px 11px;
+  font-size:.8rem;
+  margin:2px;
+}
+
+/* Theme-toggle button */
+.theme-btn{
+  cursor:pointer;
+  border:1px solid var(--line);
+  background:var(--surface);
+  color:var(--ink);
+  border-radius:999px;
+  padding:7px 14px;
+  font-size:.85rem;
+}
+.theme-btn:hover{border-color:var(--brand)}
+
+/* Callouts / notices */
+.note{
+  border-left:4px solid var(--brand);
+  background:var(--tip-bg);
+  padding:12px 16px;
+  border-radius:var(--radius-sm);
+  margin:14px 0;
+}
+.note.ok{border-color:var(--ok);background:var(--ok-bg)}
+.note.warn{border-color:var(--warn);background:var(--warn-bg)}

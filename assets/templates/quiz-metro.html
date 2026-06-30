@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>刷题 · Metro 磁贴</title>
+<script>
+/* anti-flash: set theme before first paint (shared key) */
+(function(){try{var t=localStorage.getItem('esb-theme');
+if(!t)t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+</script>
+<style>
+/* ===== Windows 10 Metro / Modern UI — strict tiles, sharp corners ===== */
+:root,[data-theme="light"]{
+  --bg:#e9e9e9;--surface:#ffffff;--surface-2:#f3f3f3;--ink:#1b1b1b;--ink-soft:#5a5a5a;
+  --line:#cfcfcf;--accent:#0078d7;--accent-dk:#005a9e;--on-accent:#ffffff;
+  --ok:#107c10;--ok-bg:#dff6dd;--no:#e81123;--no-bg:#fde7e9;--sel:#cfe8ff;
+}
+[data-theme="dark"]{
+  --bg:#1b1b1b;--surface:#2b2b2b;--surface-2:#202020;--ink:#ffffff;--ink-soft:#b8b8b8;
+  --line:#3c3c3c;--accent:#4cc2ff;--accent-dk:#0078d7;--on-accent:#001a2c;
+  --ok:#6ccb5f;--ok-bg:#143a14;--no:#ff99a4;--no-bg:#3a1418;--sel:#103a5c;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Segoe UI Variable","Segoe UI","Microsoft YaHei","PingFang SC",system-ui,sans-serif;
+  font-size:15px;line-height:1.55}
+.wrap{max-width:880px;margin:0 auto;padding:0 16px 80px}
+.appbar{background:var(--surface);border-bottom:2px solid var(--accent);position:sticky;top:0;z-index:30}
+.abin{max-width:880px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.brand{font-size:1.2rem;font-weight:600;flex:1;letter-spacing:.3px}
+.brand b{color:var(--accent)}
+.sqbtn{border:1px solid var(--line);background:var(--surface);color:var(--ink);height:34px;padding:0 12px;
+  cursor:pointer;font-family:inherit;font-size:.84rem;border-radius:0;transition:.12s}
+.sqbtn:hover{border-color:var(--accent)}
+.sqbtn.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.scope{display:flex;border:1px solid var(--line)}
+.scope .sqbtn{border:none;border-right:1px solid var(--line)}
+.scope .sqbtn:last-child{border-right:none}
+.crumb{margin:16px 2px 10px;font-size:.82rem;color:var(--ink-soft);letter-spacing:.5px;text-transform:uppercase}
+.crumb a{color:var(--accent);text-decoration:none}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.tile{position:relative;border:none;border-radius:0;color:#fff;cursor:pointer;font-family:inherit;text-align:left;
+  padding:16px;min-height:108px;display:flex;flex-direction:column;justify-content:space-between;
+  transition:transform .08s ease;overflow:hidden}
+.tile:active{transform:scale(.965)}
+.tile .ic{font-size:1.7rem;line-height:1}
+.tile .nm{font-size:1.06rem;font-weight:600}
+.tile .ct{position:absolute;right:12px;bottom:10px;font-size:1.5rem;font-weight:300;opacity:.92}
+.tile.wide{grid-column:span 2}
+.card{background:var(--surface);border-left:4px solid var(--accent);padding:18px 20px;margin:14px 0}
+.qhead{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;font-size:.78rem}
+.qhead .pos{color:var(--ink-soft)}
+.lab{display:inline-block;background:var(--surface-2);border:1px solid var(--line);padding:2px 9px;color:var(--ink-soft)}
+.lab.acc{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.lab.star{background:#f0a30a;color:#1b1b1b;border-color:#f0a30a}
+.qtext{font-size:1.08rem;font-weight:600;margin:10px 0 14px;white-space:pre-wrap;line-height:1.5}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;gap:11px;align-items:flex-start;border:1px solid var(--line);background:var(--surface);
+  padding:11px 13px;cursor:pointer;transition:.1s;border-radius:0}
+.opt:hover{border-color:var(--accent);background:var(--surface-2)}
+.opt .mk{flex:0 0 auto;width:24px;height:24px;border:1px solid var(--ink-soft);display:grid;place-items:center;
+  font-size:.8rem;font-weight:700;color:var(--ink-soft)}
+.opt.sel{border-color:var(--accent);background:var(--sel)}
+.opt.sel .mk{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.opt.correct{border-color:var(--ok);background:var(--ok-bg)}
+.opt.correct .mk{background:var(--ok);color:#fff;border-color:var(--ok)}
+.opt.wrong{border-color:var(--no);background:var(--no-bg)}
+.opt.wrong .mk{background:var(--no);color:#fff;border-color:var(--no)}
+.opt.locked{cursor:default}
+.field{width:100%;border:1px solid var(--ink-soft);background:var(--surface);color:var(--ink);
+  padding:11px 12px;font-size:1rem;font-family:inherit;border-radius:0}
+.field:focus{outline:none;border-color:var(--accent);border-width:2px;padding:10px 11px}
+textarea.field{min-height:120px;line-height:1.55;resize:vertical}
+.fills{display:flex;flex-direction:column;gap:8px}
+.blanklab{font-size:.84rem;color:var(--ink-soft);font-weight:600;margin-top:4px}
+pre{background:var(--surface-2);border:1px solid var(--line);color:var(--ink);padding:13px 15px;overflow:auto;
+  font-family:"Cascadia Mono","Consolas","Courier New",monospace;font-size:13px;line-height:1.55;border-radius:0;white-space:pre}
+.prelab{font-size:.78rem;color:var(--ink-soft);font-weight:600;margin:8px 0 5px;text-transform:uppercase;letter-spacing:.5px}
+.hint{font-size:.78rem;color:var(--ink-soft);margin:9px 2px 0}
+.reveal{margin-top:14px;border-left:4px solid var(--accent);padding:12px 14px;font-size:.92rem;background:var(--surface-2)}
+.reveal.ok{border-color:var(--ok);background:var(--ok-bg)}
+.reveal.no{border-color:var(--no);background:var(--no-bg)}
+.reveal .t{font-weight:700;display:block;margin-bottom:3px}
+.reveal code{background:rgba(127,127,127,.22);padding:.05em .4em;font-family:"Cascadia Mono","Consolas",monospace}
+.refans{white-space:pre-wrap}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px;align-items:center}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:9px 18px;cursor:pointer;
+  font-family:inherit;font-size:.9rem;border-radius:0;transition:.1s}
+.btn:hover{border-color:var(--accent)}
+.btn.pri{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.btn.pri:hover{background:var(--accent-dk)}
+.btn[disabled]{opacity:.4;cursor:default}
+.selfscore{display:flex;gap:9px;margin-top:12px;flex-wrap:wrap}
+.prog{height:4px;background:var(--line);margin:14px 0 2px}
+.prog>i{display:block;height:100%;background:var(--accent);transition:width .25s}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:4px 2px 12px;scrollbar-width:thin}
+.chip{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);
+  padding:6px 12px;cursor:pointer;white-space:nowrap;font-size:.82rem;border-radius:0}
+.chip.sel{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.empty{text-align:center;padding:54px 16px;color:var(--ink-soft)}
+.empty .big{font-size:2.6rem;margin-bottom:10px}
+.empty code{background:var(--surface-2);border:1px solid var(--line);padding:.15em .5em;font-family:"Consolas",monospace;font-size:.85em}
+.statgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin:6px 0}
+.stat{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--accent);padding:14px}
+.stat .n{font-size:1.8rem;font-weight:600}
+.stat .l{font-size:.8rem;color:var(--ink-soft)}
+.snack{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(16px);background:var(--ink);color:var(--bg);
+  padding:11px 18px;font-size:.86rem;opacity:0;pointer-events:none;transition:.2s;z-index:50;border-radius:0}
+.snack.show{opacity:1;transform:translateX(-50%)}
+@media(max-width:540px){.brand{font-size:1rem;flex-basis:100%}.tile.wide{grid-column:span 1}}
+</style>
+</head>
+<body>
+<div class="appbar"><div class="abin">
+  <div class="brand">刷题 · <b>Metro</b></div>
+  <div class="scope" id="scope">
+    <button class="sqbtn on" data-scope="all">全部</button>
+    <button class="sqbtn" data-scope="curated">★ 精选</button>
+  </div>
+  <button class="sqbtn" id="exportBtn">导出</button>
+  <button class="sqbtn" id="importBtn">导入</button>
+  <input type="file" id="importFile" accept="application/json" style="display:none">
+  <button class="sqbtn" id="themeBtn">&#127769;</button>
+</div></div>
+
+<div class="wrap" id="app"></div>
+<div class="snack" id="snack"></div>
+
+<script>
+/* ===== Question bank (injected at build time) ===== */
+const BANK = /*__BANK__*/[];
+
+/* ===== State ===== */
+const NS='esb-quiz-metro', THEME_KEY='esb-theme';
+let S=load();
+function load(){try{return Object.assign({answers:{},wrong:[]},JSON.parse(localStorage.getItem(NS)||'{}'));}catch(e){return{answers:{},wrong:[]};}}
+function save(){try{localStorage.setItem(NS,JSON.stringify(S));}catch(e){}}
+let view='home', scope='all', mode='single', chapter='all', idx=0;
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s)), A=()=>$('#app');
+function esc(s){return(s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function norm(s){return(s||'').toString().trim().toLowerCase().replace(/\s+/g,'').replace(/[。，,；;\.]/g,'');}
+function accepts(q,k){const v=q.answer[k];return Array.isArray(v)?v:[v];}
+function byId(id){return BANK.find(q=>q.id===id);}
+const chapters=[...new Set(BANK.map(q=>q.chapter).filter(c=>c!=null&&c!==''))]
+  .sort((a,b)=>(typeof a==='number'&&typeof b==='number')?a-b:String(a).localeCompare(String(b),'zh'));
+const MODES=[
+  {k:'single',nm:'单选题',ic:'◉',c:'#0050ef'},{k:'multi',nm:'多选题',ic:'☑',c:'#00aba9'},
+  {k:'fill',nm:'填空题',ic:'▭',c:'#60a917'},{k:'short',nm:'简答题',ic:'✎',c:'#fa6800'},
+  {k:'code',nm:'代码题',ic:'{ }',c:'#6a00ff'},{k:'mix',nm:'混合刷',ic:'⚄',c:'#e51400'},
+  {k:'wrong',nm:'错题本',ic:'★',c:'#647687'},
+];
+function curated(q){return q.curated===true||q.star===true;}
+function inScope(q){return scope==='curated'?curated(q):true;}
+function poolOf(m){
+  if(m==='wrong') return BANK.filter(q=>S.wrong.includes(q.id)&&inScope(q));
+  let l=BANK.filter(inScope);
+  if(m!=='mix') l=l.filter(q=>q.type===m);
+  return l;
+}
+function pool(){let l=poolOf(mode);if(mode!=='wrong'&&chapter!=='all')l=l.filter(q=>String(q.chapter)===String(chapter));return l;}
+function typeName(q){return q.type==='single'?'单选':q.type==='multi'?'多选':q.type==='fill'?'填空':q.type==='short'?'简答':q.type==='code'?'代码':q.type;}
+
+/* ===== Home (tiles) ===== */
+function renderHome(){
+  view='home';
+  if(!BANK.length){A().innerHTML=bankEmpty();return;}
+  let h='<div class="crumb">选择刷题模式（'+(scope==='curated'?'精选范围':'全部题库')+'）</div><div class="tiles">';
+  MODES.forEach(m=>{const n=poolOf(m.k).length;
+    h+='<button class="tile" style="background:'+m.c+'" data-mode="'+m.k+'">'+
+       '<span class="ic">'+m.ic+'</span><span class="nm">'+m.nm+'</span><span class="ct">'+n+'</span></button>';});
+  const st=stats();
+  h+='<button class="tile wide" style="background:var(--accent-dk)" data-go="stats">'+
+     '<span class="ic">&#128202;</span><span class="nm">答题统计</span>'+
+     '<span class="ct">'+(st.ans?Math.round(st.cor/st.ans*100)+'%':'--')+'</span></button>';
+  h+='</div><div class="crumb">题库概览</div><div class="statgrid">'+
+     cell('总题量',BANK.filter(inScope).length)+cell('已答',st.ans)+
+     cell('正确率',st.ans?Math.round(st.cor/st.ans*100)+'%':'--')+
+     cell('错题',S.wrong.filter(id=>{const q=byId(id);return q&&inScope(q);}).length)+'</div>';
+  A().innerHTML=h;
+  $$('.tile[data-mode]').forEach(t=>t.onclick=()=>{mode=t.dataset.mode;idx=0;chapter='all';renderQuiz();});
+  const sg=$('.tile[data-go="stats"]');if(sg)sg.onclick=renderStats;
+}
+function cell(l,n){return '<div class="stat"><div class="n">'+n+'</div><div class="l">'+l+'</div></div>';}
+function bankEmpty(){
+  return '<div class="empty"><div class="big">&#128229;</div>'+
+    '<div style="font-size:1.05rem;font-weight:600;margin-bottom:6px;color:var(--ink)">示例题库为空</div>'+
+    '<div>把题库 JSON 注入模板里的 <code>BANK</code> 数组占位符即可开始刷题。<br>'+
+    'Inject a bank into the <code>BANK</code> placeholder to begin.</div></div>';
+}
+
+/* ===== Stats ===== */
+function renderStats(){
+  view='stats';const st=stats();
+  let h='<div class="crumb"><a href="#" id="back">&#8592; 返回磁贴</a> · 答题统计</div>';
+  h+='<div class="statgrid">'+cell('已答',st.ans)+cell('答对',st.cor)+cell('答错',st.ans-st.cor)+
+     cell('正确率',st.ans?Math.round(st.cor/st.ans*100)+'%':'--')+'</div>';
+  h+='<div class="crumb">分题型正确率</div><div class="statgrid">';
+  [['single','单选'],['multi','多选'],['fill','填空'],['short','简答(自评)'],['code','代码(自评)']].forEach(([k,nm])=>{
+    const b=st.by[k];h+=cell(nm,b[1]?Math.round(b[0]/b[1]*100)+'%':'--');});
+  h+='</div><div class="actions"><button class="btn" id="resetBtn">清空所有记录</button>'+
+     '<button class="btn" id="expBtn">导出记录</button><button class="btn" id="impBtn">导入记录</button></div>';
+  A().innerHTML=h;
+  $('#back').onclick=e=>{e.preventDefault();renderHome();};
+  $('#resetBtn').onclick=()=>{if(confirm('清空所有答题与错题记录？')){S={answers:{},wrong:[]};save();renderStats();snack('已清空');}};
+  $('#expBtn').onclick=doExport;$('#impBtn').onclick=()=>$('#importFile').click();
+}
+
+/* ===== Quiz ===== */
+function renderQuiz(){
+  view='quiz';const list=pool();if(idx>=list.length)idx=0;
+  let h='<div class="crumb"><a href="#" id="back">&#8592; 磁贴</a> · '+
+        (MODES.find(m=>m.k===mode)||{nm:mode}).nm+'（'+(scope==='curated'?'精选':'全部')+'） · 共 '+list.length+' 题</div>';
+  if(mode!=='wrong'&&chapters.length){
+    h+='<div class="chips" id="chips"><button class="chip'+(chapter==='all'?' sel':'')+'" data-ch="all">全部章</button>';
+    chapters.forEach(c=>{if(poolOf(mode).some(q=>String(q.chapter)===String(c)))
+      h+='<button class="chip'+(String(chapter)===String(c)?' sel':'')+'" data-ch="'+esc(c)+'">'+(isNaN(c)?esc(c):'第'+c+'章')+'</button>';});
+    h+='</div>';
+  }
+  h+='<div class="prog"><i style="width:'+(list.length?((idx+1)/list.length*100):0)+'%"></i></div><div id="stage"></div>';
+  A().innerHTML=h;
+  $('#back').onclick=e=>{e.preventDefault();renderHome();};
+  $$('#chips .chip').forEach(c=>c.onclick=()=>{chapter=c.dataset.ch;idx=0;renderQuiz();});
+  renderStage(list);
+}
+function renderStage(list){
+  const stage=$('#stage');
+  if(!list.length){stage.innerHTML='<div class="empty"><div class="big">'+(mode==='wrong'?'\u{1F389}':'\u{1F4ED}')+'</div>'+(mode==='wrong'?'错题本为空，继续保持！':'该范围暂无题目')+'</div>';return;}
+  const q=list[idx],rec=S.answers[q.id];
+  let h='<div class="card"><div class="qhead"><span class="pos">'+(idx+1)+' / '+list.length+'</span>'+
+    (q.chapter!=null&&q.chapter!==''?'<span class="lab acc">'+(isNaN(q.chapter)?esc(q.chapter):'第'+esc(q.chapter)+'章')+'</span>':'')+
+    (curated(q)?'<span class="lab star">★精选</span>':'')+
+    (Array.isArray(q.tags)?q.tags.map(t=>'<span class="lab">'+esc(t)+'</span>').join(''):'')+
+    '<span class="lab">'+typeName(q)+'</span></div><div class="qtext">'+esc(q.stem)+'</div>';
+  h+=bodyOf(q,rec)+'<div id="ansReveal"></div>'+navRow(q,rec,list)+'</div>';
+  stage.innerHTML=h;wire(q,list);
+}
+function bodyOf(q,rec){
+  if(q.type==='single'||q.type==='multi'){
+    let h='<div class="opts" id="opts">';const multi=q.type==='multi';const ansSet=multi?new Set(q.answer):null;
+    (q.options||[]).forEach((o,i)=>{let cls='opt';
+      if(rec){cls+=' locked';const picked=multi?(rec.picked||[]).includes(i):rec.picked===i;const corr=multi?ansSet.has(i):i===q.answer;
+        if(corr)cls+=' correct';else if(picked)cls+=' wrong';}
+      h+='<div class="'+cls+'" data-i="'+i+'"><div class="mk">'+'ABCDEFGH'[i]+'</div><div>'+esc(o)+'</div></div>';});
+    h+='</div>';if(!rec)h+='<div class="hint">'+(multi?'可多选，点“提交”判分':'点选项即时判分')+'</div>';if(rec)h+=resultBlock(q,rec.correct);return h;
+  }
+  if(q.type==='fill'){
+    const picked=(rec&&Array.isArray(rec.picked))?rec.picked:[];let h='<div class="fills">';
+    q.answer.forEach((b,k)=>{h+=(q.answer.length>1?'<span class="blanklab">('+(k+1)+')</span>':'')+
+      '<input class="field fillInput" data-k="'+k+'" placeholder="填空'+(q.answer.length>1?(' '+(k+1)):'')+'…" value="'+esc(picked[k]||'')+'" '+(rec?'disabled':'')+'>';});
+    h+='</div>';if(!rec)h+='<div class="hint">回车即时判分</div>';if(rec)h+=resultBlock(q,rec.correct);return h;
+  }
+  /* short / code */
+  let h='';
+  if(q.type==='code'&&q.code) h+='<div class="prelab">题目代码</div><pre>'+esc(q.code)+'</pre>';
+  h+='<textarea class="field" id="shortInput" placeholder="写下你的作答 / 代码…">'+(rec&&rec.text?esc(rec.text):'')+'</textarea>';
+  h+='<div id="shortReveal">'+(rec?refBlock(q)+selfRow(rec):'')+'</div>';return h;
+}
+function resultBlock(q,correct){
+  let h='<div class="reveal '+(correct?'ok':'no')+'"><span class="t">'+(correct?'✓ 答对了':'✗ 答错了')+'</span>';
+  if(q.type==='single'&&!correct)h+='正确答案：<b>'+'ABCDEFGH'[q.answer]+'</b>　';
+  if(q.type==='multi')h+='正确答案：<b>'+q.answer.map(i=>'ABCDEFGH'[i]).join('')+'</b>　';
+  if(q.type==='fill')h+='标准答案：'+q.answer.map((b,k)=>(q.answer.length>1?'('+(k+1)+') ':'')+'<code>'+esc(accepts(q,k)[0])+'</code>').join('　');
+  if(q.explanation)h+='<br><span class="t" style="margin-top:6px">解析</span>'+esc(q.explanation);
+  return h+'</div>';
+}
+function refBlock(q){
+  let h='<div class="reveal"><span class="t">参考答案</span>';
+  if(typeof q.answer==='string')h+='<div class="refans">'+esc(q.answer)+'</div>';
+  if(q.explanation)h+='<br><span class="t" style="margin-top:6px">'+(q.type==='short'?'评分要点':'解析')+'</span>'+esc(q.explanation);
+  return h+'</div>';
+}
+function selfRow(rec){const a=rec&&rec.correct===true,b=rec&&rec.correct===false;
+  return '<div class="selfscore"><button class="btn '+(a?'pri':'')+'" data-self="1">我答对了</button>'+
+    '<button class="btn '+(b?'pri':'')+'" data-self="0">没答对</button></div>';}
+function navRow(q,rec,list){
+  const reveals=(q.type==='short'||q.type==='code');
+  let h='<div class="actions">';
+  if((q.type==='multi'||q.type==='fill')&&!rec)h+='<button class="btn pri" id="submitBtn">提交</button>';
+  if(reveals)h+='<button class="btn pri" id="revealBtn">显示参考答案</button>';
+  if(!reveals&&!rec)h+='<button class="btn" id="revealAnsBtn">&#128161; 看答案</button>';
+  h+='<button class="btn" id="prevBtn"'+(idx<=0?' disabled':'')+'>上一题</button>';
+  h+='<button class="btn" id="nextBtn"'+(idx>=list.length-1?' disabled':'')+'>下一题</button></div>';
+  return h;
+}
+function wire(q,list){
+  const pv=$('#prevBtn'),nx=$('#nextBtn');
+  if(pv)pv.onclick=()=>{if(idx>0){idx--;renderStage(list);}};
+  if(nx)nx.onclick=()=>{if(idx<list.length-1){idx++;renderStage(list);}};
+  if(S.answers[q.id]){if(q.type==='short'||q.type==='code')bindSelf(q);return;}
+  if(q.type==='single'){
+    $$('#opts .opt').forEach(el=>el.onclick=()=>{const p=Number(el.dataset.i);record(q,{picked:p,correct:p===q.answer});renderStage(list);});
+    const ra=$('#revealAnsBtn');if(ra)ra.onclick=()=>showAns(q);
+  }else if(q.type==='multi'){
+    const sel=new Set();
+    $$('#opts .opt').forEach(el=>el.onclick=()=>{const i=Number(el.dataset.i);if(sel.has(i)){sel.delete(i);el.classList.remove('sel');}else{sel.add(i);el.classList.add('sel');}});
+    const sb=$('#submitBtn');if(sb)sb.onclick=()=>{if(!sel.size){snack('请至少选一项');return;}
+      const picked=[...sel].sort((a,b)=>a-b);const ans=[...q.answer].sort((a,b)=>a-b);
+      const correct=picked.length===ans.length&&picked.every((v,i)=>v===ans[i]);
+      record(q,{picked,correct});renderStage(list);};
+    const ra=$('#revealAnsBtn');if(ra)ra.onclick=()=>showAns(q);
+  }else if(q.type==='fill'){
+    const submit=()=>{const inp=$$('.fillInput').map(el=>el.value);if(inp.every(v=>!v.trim())){snack('请先填写');return;}
+      const correct=q.answer.every((b,k)=>accepts(q,k).some(a=>norm(a)===norm(inp[k]||'')));
+      record(q,{picked:inp,correct});renderStage(list);};
+    const sb=$('#submitBtn');if(sb)sb.onclick=submit;
+    $$('.fillInput').forEach(el=>el.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();submit();}}));
+    const ra=$('#revealAnsBtn');if(ra)ra.onclick=()=>showAns(q);
+  }else{ /* short / code */
+    const rv=$('#revealBtn');if(rv)rv.onclick=()=>{const text=($('#shortInput')&&$('#shortInput').value)||'';const prev=S.answers[q.id]||{};
+      S.answers[q.id]={text,correct:(prev.correct===true||prev.correct===false)?prev.correct:undefined};save();
+      $('#shortReveal').innerHTML=refBlock(q)+selfRow(S.answers[q.id]);bindSelf(q);};
+    bindSelf(q);
+  }
+}
+function bindSelf(q){$$('#shortReveal [data-self]').forEach(b=>b.onclick=()=>{
+  const correct=b.dataset.self==='1';const text=($('#shortInput')&&$('#shortInput').value)||(S.answers[q.id]&&S.answers[q.id].text)||'';
+  record(q,{text,correct},true);$('#shortReveal').innerHTML=refBlock(q)+selfRow(S.answers[q.id]);bindSelf(q);});}
+function showAns(q){
+  if(q.type==='single'||q.type==='multi'){const set=q.type==='multi'?new Set(q.answer):null;
+    $$('#opts .opt').forEach(el=>{el.classList.add('locked');el.onclick=null;const i=Number(el.dataset.i);if(q.type==='multi'?set.has(i):i===q.answer)el.classList.add('correct');});
+    let h='<div class="reveal"><span class="t">正确答案：'+(q.type==='multi'?q.answer.map(i=>'ABCDEFGH'[i]).join(''):'ABCDEFGH'[q.answer])+'</span>';
+    if(q.explanation)h+=esc(q.explanation);$('#ansReveal').innerHTML=h+'</div>';
+  }else if(q.type==='fill'){$$('.fillInput').forEach(el=>el.disabled=true);
+    let h='<div class="reveal"><span class="t">参考答案</span>'+q.answer.map((b,k)=>(q.answer.length>1?'('+(k+1)+') ':'')+'<code>'+esc(accepts(q,k)[0])+'</code>').join('　');
+    if(q.explanation)h+='<br>'+esc(q.explanation);$('#ansReveal').innerHTML=h+'</div>';}
+  const ra=$('#revealAnsBtn');if(ra)ra.remove();const sb=$('#submitBtn');if(sb)sb.remove();
+}
+function record(q,data,isShort){
+  S.answers[q.id]=Object.assign({},S.answers[q.id],data);
+  const wi=S.wrong.indexOf(q.id);
+  if(data.correct===false){if(wi<0)S.wrong.push(q.id);}else if(data.correct===true){if(wi>=0)S.wrong.splice(wi,1);}
+  save();if(!isShort&&data.correct===false)snack('已加入错题本');
+}
+function stats(){let ans=0,cor=0;const by={single:[0,0],multi:[0,0],fill:[0,0],short:[0,0],code:[0,0]};
+  for(const id in S.answers){const r=S.answers[id],q=byId(id);if(!q)continue;
+    if(r.correct===true||r.correct===false){ans++;if(by[q.type])by[q.type][1]++;if(r.correct){cor++;if(by[q.type])by[q.type][0]++;}}}
+  return {ans,cor,by};}
+
+/* ===== Export / import records ===== */
+function doExport(){
+  const data=JSON.stringify({app:'esb-quiz-metro',ver:1,saved:S},null,2);
+  const blob=new Blob([data],{type:'application/json'}),url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='quiz-records.json';document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},100);snack('已导出记录文件');
+}
+$('#importFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{try{const o=JSON.parse(r.result),d=o.saved||o;if(!d.answers){snack('文件格式不对');return;}
+    S=Object.assign({answers:{},wrong:[]},d);save();snack('导入成功，记录已恢复');route();}catch(err){snack('导入失败：'+err.message);}};
+  r.readAsText(f);e.target.value='';};
+
+/* ===== Appbar ===== */
+$$('#scope .sqbtn').forEach(b=>b.onclick=()=>{scope=b.dataset.scope;$$('#scope .sqbtn').forEach(x=>x.classList.toggle('on',x===b));route();});
+function applyTheme(t){document.documentElement.setAttribute('data-theme',t);$('#themeBtn').innerHTML=t==='dark'?'☀️':'\u{1F319}';try{localStorage.setItem(THEME_KEY,t);}catch(e){}}
+$('#themeBtn').onclick=()=>applyTheme((document.documentElement.getAttribute('data-theme')||'light')==='dark'?'light':'dark');
+$('#exportBtn').onclick=doExport;$('#importBtn').onclick=()=>$('#importFile').click();
+let snackT;function snack(m){const s=$('#snack');s.textContent=m;s.classList.add('show');clearTimeout(snackT);snackT=setTimeout(()=>s.classList.remove('show'),1700);}
+function route(){if(view==='quiz')renderQuiz();else if(view==='stats')renderStats();else renderHome();}
+
+/* ===== Boot ===== */
+applyTheme(document.documentElement.getAttribute('data-theme')||'light');
+renderHome();
+</script>
+</body>
+</html>
