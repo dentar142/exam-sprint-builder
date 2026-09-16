@@ -87,6 +87,7 @@ Use `PyMuPDF` (`pip install pymupdf`):
 
 ```python
 import fitz   # PyMuPDF
+from pathlib import Path
 
 doc = fitz.open("past_paper.pdf")
 out_img = Path("pdf_images"); out_img.mkdir(exist_ok=True)

@@ -37,6 +37,12 @@
 - Python 3.7+
 - 已准备好 HTML 模板文件（含占位符 `/*__BANK__*/[]`）
 
+不改已提交的 `sample-quiz.html`、只做校验时，在仓库根目录跑夹具（会把两套刷题模板都构建到临时目录并运行 `verify_html.py`）：
+
+```bash
+python scripts/run_sample_fixture.py
+```
+
 ### 构建命令 / Build Command
 
 在本仓库根目录执行：

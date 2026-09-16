@@ -6,6 +6,36 @@
 > - **Self-contained offline**: no CDN, no external fonts, no `https?://` URLs inside the file; all assets inlined as base64 or embedded CSS.
 > - **File target**: openable from the local filesystem via `file://` without a server.
 > - **Language**: English prose + Chinese subject keywords; never mix in copyrighted exam text.
+> - **Question bank contract** (deliverables 5–7): a top-level JSON **array**; stem field is `stem`; types are `single | multi | fill | short | code`. See [question-bank-pipeline.md](question-bank-pipeline.md). Do **not** wrap the bank in `{ "questions": [...] }` and do **not** use a `text` field for the stem.
+
+### Template status
+
+| # | Deliverable | Bundled template | How to produce |
+|---|-------------|------------------|----------------|
+| 1 | MD note library | none | Agent-authored Markdown |
+| 2 | HTML study system | `assets/templates/study-system.html` (`<!--__CONTENT__-->`) | Inject then verify |
+| 3 | One-page speed review | none | Agent-authored; HTML follows the checklist below |
+| 4 | A4 cheat sheet | `assets/templates/cheatsheet-a4.html` (`<!--__SECTIONS__-->`) | Inject then verify |
+| 5 | Mock exam | none | Agent-authored HTML; consume the same bank array |
+| 6 | Material 3 quiz | `assets/templates/quiz-material3.html` (`/*__BANK__*/[]`) | `build_quiz.py` |
+| 7 | Metro quiz | `assets/templates/quiz-metro.html` (`/*__BANK__*/[]`) | `build_quiz.py` |
+| 8 | Knowledge diagram | none | Agent-authored; skip if fewer than 6 nodes |
+| 9 | Teacher-named points | none | Agent-authored MD + HTML |
+| 10 | Past-paper solutions | none | Agent-authored; skip if no past papers |
+
+**Do not invent new bundled HTML apps.** If a row says "none", write the file from the spec in this catalog and the HTML checklist in [html-conventions.md](html-conventions.md). Never run `verify_html.py` on an uninjected template (placeholders `__BANK__`, `__CONTENT__`, `__SECTIONS__` are expected to fail).
+
+### Agent-authored HTML checklist
+
+Copy this before claiming an untemplated HTML deliverable is done. Full rules: [html-conventions.md](html-conventions.md).
+
+- [ ] Opens from `file://` by double-click; no console errors.
+- [ ] No CDN, no `<script type="module">`, no `import`/`export`, no remote `fetch`.
+- [ ] Anti-flash head script is first in `<head>` and reads `esb-theme`.
+- [ ] Theme toggle flips `data-theme` on `<html>` and writes `esb-theme`.
+- [ ] App state (if any) uses a namespaced `esb-…` key with JSON export/import.
+- [ ] Print path works where relevant (`@media print`, `@page A4`).
+- [ ] After writing, run `python scripts/verify_html.py <file.html>` and show the `PASS (4/4 checks passed)` verdict.
 
 ---
 
@@ -174,25 +204,26 @@ A polished, mobile-friendly quiz application with multiple question types, per-s
 
 **Output filename**: `{subject}_quiz_app.html`
 
-**Quiz bank JSON schema (shared across deliverables 6 & 7)**
+**Quiz bank JSON schema (canonical; shared by deliverables 5, 6 & 7)**
+
+Top-level value is a **JSON array** of question objects (not a `{questions: [...]}` wrapper). This is what `scripts/build_quiz.py` loads and what the quiz templates read as `q.stem`.
+
 ```json
-{
-  "meta": { "subject": "string", "version": "string" },
-  "questions": [
-    {
-      "id": "string (unique)",
-      "type": "single | fill | short | multi",
-      "chapter": "number",
-      "text": "string",
-      "options": ["string"],          // required for single/multi
-      "answer": 0,                    // index (single/multi) or string (fill/short)
-      "explanation": "string",
-      "tags": ["string"],
-      "difficulty": 1                 // 1–3
-    }
-  ]
-}
+[
+  {
+    "id": "ch01_q001",
+    "type": "single | multi | fill | short | code",
+    "chapter": "Chapter 1 — …",
+    "stem": "Question text (bilingual encouraged)",
+    "options": ["…"],
+    "answer": "see type table in question-bank-pipeline.md",
+    "explanation": "Why this answer is correct.",
+    "tags": ["string"]
+  }
+]
 ```
+
+Per-type `answer` shapes: `single` → `int` index; `multi` → `int[]`; `fill` → `string[][]`; `short` → `string`; `code` → `{"code": "…", "explanation": "…"}`. Optional `difficulty` (1–3) is allowed but not required by the builder.
 
 **Structure**
 - Home screen: subject title, mode selector chips (单选 / 填空 / 简答 / 混合 / 收藏 / 错题本).

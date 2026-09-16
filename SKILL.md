@@ -80,16 +80,17 @@ Dispatch agents; don't do it all in one context.
 4. **Author question banks** via the命题 → adversarial-proofread → merge/shuffle/inject
    pipeline in [references/question-bank-pipeline.md](references/question-bank-pipeline.md).
    Bundled tools: `scripts/build_quiz.py`, `assets/md2html.js`, `assets/templates/`.
-5. **Verify (independent pass)** — self-contained / no external links / JS parses /
-   bank structure & answer distribution / key magic-values present. Checklist and
-   `scripts/verify_html.py` in [references/verification.md](references/verification.md).
+5. **Verify (independent pass)** — run `scripts/verify_html.py` on **generated**
+   HTML only (4 checks; expected `PASS (4/4 checks passed)`). Do not verify
+   uninjected templates. Bank contract: top-level JSON array, field `stem`.
+   Checklist in [references/verification.md](references/verification.md).
 
 ## Hard Rules
 
 - **Never modify the student's originals.** Read them; write only into the new output folder.
 - **Offline-first.** Self-contained HTML only: no CDN, no ES-module imports, openable via `file://`. **Do not deploy online unless the user explicitly asks.**
 - **Ground, then verify.** No exam content from general knowledge alone; a second adversarial pass checks every generated question and answer.
-- **Report in the user's language** (default中文 here), and only claim "done" after the verifier passes — show the evidence.
+- **Report in the user's language** (mirror whatever they write; default 中文 if they wrote in Chinese), and only claim "done" after the verifier passes — show the evidence.
 - **Light + dark** share one `localStorage` theme key with an anti-flash inline head script (see html-conventions).
 
 ## Common Pitfalls (full list in references/troubleshooting.md)

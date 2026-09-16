@@ -1,8 +1,8 @@
 # Media Extraction Reference
 
 How to pull teachable content out of a lecture recording or audio file.
-Assumes **ffmpeg / ffprobe** is installed (e.g. `D:\ffmpeg\bin` on PATH, or replace
-`ffmpeg` / `ffprobe` with the full path throughout).
+Assumes **ffmpeg / ffprobe** is installed and on `PATH`. If not, call them by
+absolute path (forward slashes work in PowerShell, cmd, and Unix shells).
 
 ---
 
@@ -10,8 +10,8 @@ Assumes **ffmpeg / ffprobe** is installed (e.g. `D:\ffmpeg\bin` on PATH, or repl
 
 Always inspect the file first so you know what you are dealing with.
 
-```bat
-ffprobe -v error -show_entries format=duration,size -show_streams ^
+```bash
+ffprobe -v error -show_entries format=duration,size -show_streams \
     -of default=noprint_wrappers=1 in.mp4
 ```
 
@@ -27,12 +27,14 @@ Key fields to note:
 A scene-change filter captures the moment the teacher switches slides without
 dumping every video frame.
 
-```bat
-ffmpeg -i in.mp4 ^
-    -vf "select='gt(scene,0.05)',showinfo" ^
-    -vsync vfr ^
-    frames\slide_%04d.png
+```bash
+ffmpeg -i in.mp4 \
+    -vf "select='gt(scene,0.05)',showinfo" \
+    -fps_mode vfr \
+    frames/slide_%04d.png
 ```
+
+`-fps_mode vfr` is the current flag. Older ffmpeg builds accept `-vsync vfr` as an alias.
 
 **Tuning the scene threshold (`0.03`–`0.1`)**
 
@@ -42,7 +44,7 @@ ffmpeg -i in.mp4 ^
 | `0.05` | Good default for slide-based lectures with clear transitions. |
 | `0.10` | Only hard cuts; may miss gradual fade-in slides or annotation reveals. |
 
-Start at `0.05`, then inspect the `frames\` folder. If two consecutive slides share
+Start at `0.05`, then inspect the `frames/` folder. If two consecutive slides share
 nearly identical content, raise to `0.07`. If a slide appears to be skipped, lower
 to `0.03`.
 
@@ -51,8 +53,8 @@ to `0.03`.
 When scene detection misses incremental bullet reveals, supplement with one frame
 every 15 seconds:
 
-```bat
-ffmpeg -i in.mp4 -vf fps=1/15 frames\interval_%04d.png
+```bash
+ffmpeg -i in.mp4 -vf fps=1/15 frames/interval_%04d.png
 ```
 
 Combine both passes, then deduplicate (next section).
@@ -85,7 +87,7 @@ print(f"Kept {len(keep)} unique frames.")
 
 Whisper and most ASR engines work best on 16 kHz mono WAV.
 
-```bat
+```bash
 ffmpeg -i in.mp4 -vn -ac 1 -ar 16000 -f wav audio.wav
 ```
 
@@ -101,7 +103,7 @@ Flag breakdown:
 
 ### Install
 
-```bat
+```bash
 pip install faster-whisper
 ```
 
@@ -152,16 +154,16 @@ Subsequent runs are fully offline.
 - Long recordings (2+ hours) can take **10–30 minutes** for scene extraction and
   **20–60 minutes** for `medium` transcription on CPU. Run both in the background:
 
-  ```bat
-  start "ffmpeg-scenes" ffmpeg -i in.mp4 -vf "select='gt(scene,0.05)',showinfo" -vsync vfr frames\slide_%%04d.png
-  start "whisper-transcribe" python transcribe.py
+  ```bash
+  ffmpeg -i in.mp4 -vf "select='gt(scene,0.05)',showinfo" -fps_mode vfr frames/slide_%04d.png
+  python transcribe.py
   ```
 
-- If `ffmpeg` is not on PATH, prefix with the full path, e.g.:
+  On Windows you can background them with `Start-Process` (PowerShell) or `start`
+  (cmd). Use `frames/slide_%04d.png` (forward slashes). In a `.cmd` file the
+  percent sign must be doubled: `slide_%%04d.png`.
 
-  ```bat
-  D:\ffmpeg\bin\ffmpeg.exe -i in.mp4 ...
-  ```
+- If `ffmpeg` is not on PATH, prefix with the full path, e.g. `D:/ffmpeg/bin/ffmpeg`.
 
 - Keep source video and output frames on the **same drive** to avoid slow cross-drive
   copies; extraction is I/O-bound.
